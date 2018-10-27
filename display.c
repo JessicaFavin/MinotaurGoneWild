@@ -67,21 +67,19 @@ int launch_menu() {
 
 	menu_win = newwin(MENUBOX_HEIGHT, MENUBOX_WIDTH, starty, startx);
 	keypad(menu_win, TRUE);
-  char * gameMenu = malloc(2048*sizeof(char));
-  strcat(gameMenu, "           __  __ _             _                        \n");
-  strcat(gameMenu, "          |  \\/  (_)_ __   ___ | |_ __ _ _  _ _ __ ___  \n");
-  strcat(gameMenu, "          | |\\/| | | '_ \\ / _ \\| __/ _\\`| | | | '__/ _ \\ \n");
-  strcat(gameMenu, "          | |  | | | | | | (_) | || (_| | |_| | | |  __/ \n");
-  strcat(gameMenu, "          |_|__|_|_|_| |_|\\___/ \\__\\__,_|\\__,_|_|_ \\___| \n");
-  strcat(gameMenu, "           / ___| ___  _ __   ___  \\ \\      / (_) | __| |\n");
-  strcat(gameMenu, "          | |  _ / _ \\| '_ \\ / _ \\  \\ \\ /\\ / /| | |/ _` |\n");
-  strcat(gameMenu, "          | |_| | (_) | | | |  __/   \\ V  V / | | | (_| |\n");
-  strcat(gameMenu, "           \\____|\\___/|_| |_|\\___|    \\_/\\_/  |_|_|\\__,_|\n");
+  mvprintw(3, (col/3)-(47/2), " __  __ _             _                        ");
+  mvprintw(4, (col/3)-(47/2), "|  \\/  (_)_ __   ___ | |_ __ _ _  _ _ __ ___  ");
+  mvprintw(5, (col/3)-(47/2), "| |\\/| | | '_ \\ / _ \\| __/ _\\`| | | | '__/ _ \\ ");
+  mvprintw(6, (col/3)-(47/2), "| |  | | | | | | (_) | || (_| | |_| | | |  __/ ");
+  mvprintw(7, (col/3)-(47/2), "|_|__|_|_|_| |_|\\___/ \\__\\__,_|\\__,_|_|_ \\___| ");
+  mvprintw(8, (col/3)-(47/2), " / ___| ___  _ __   ___  \\ \\      / (_) | __| |");
+  mvprintw(9, (col/3)-(47/2), "| |  _ / _ \\| '_ \\ / _ \\  \\ \\ /\\ / /| | |/ _` |");
+  mvprintw(10, (col/3)-(47/2), "| |_| | (_) | | | |  __/   \\ V  V / | | | (_| |");
+  mvprintw(11, (col/3)-(47/2), " \\____|\\___/|_| |_|\\___|    \\_/\\_/  |_|_|\\__,_|");
   /*
   getmaxyx(stdscr,row,col);		// get the number of rows and columns
   mvprintw(row/2,(col-strlen(mesg))/2,"%s",mesg);
   */
-	mvprintw(3,0,gameMenu);
 	refresh();
 	print_menu(menu_win, highlight);
 	while(1)

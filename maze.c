@@ -30,11 +30,6 @@ void free_maze(MAZE* maze) {
 MAZE* init_maze(int line, int col) {
   MAZE* maze = malloc(sizeof(MAZE));
   maze->maze_array = init_maze_array(line, col);
-  /*
-  maze->in = malloc(sizeof(POS));
-  maze->out = malloc(sizeof(POS));
-  maze->minotaur = malloc(sizeof(POS));
-  */
   return maze;
 }
 

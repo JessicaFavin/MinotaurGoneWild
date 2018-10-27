@@ -1,6 +1,8 @@
 #ifndef MAZE_H
 #define MAZE_H
 
+#include <stdio.h>
+
 typedef struct pos POS;
 struct pos{
     int x;
@@ -23,5 +25,11 @@ struct maze{
     POS out;
     POS minotaur;
 };
+
+unsigned short ** init_maze_array();
+MAZE* init_maze();
+MAZE* gener_maze_from_file(FILE* file);
+MAZE* gener_random_maze();
+void free_maze(MAZE* maze);
 
 #endif

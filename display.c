@@ -4,6 +4,7 @@
 #include <unistd.h>
 #include <math.h>
 #include <ncurses.h>
+#include "maze.h"
 
 #define MENUBOX_WIDTH 20
 #define MENUBOX_HEIGHT 7
@@ -12,8 +13,9 @@ int startx = 0;
 int starty = 0;
 
 char *modes[] = {
-	"Berserk minautor",
+	"Berserk minotaur",
 	"Smart minotaur",
+	"Be the minotaur",
 	"Quit"
 };
 
@@ -111,4 +113,86 @@ int launch_menu() {
 	refresh();
 	endwin();
 	return choice;
+}
+/*
++--+--+--+--+--+
+|  |  |  |  |  |
++--+--+--+--+--+
+|  |  |  |  |  |
++--+--+--+--+--+
+|  |  |  |  |  |
++--+--+--+--+--+
+(line+1), (line+2)
+(col+1)
+0000 0000 0000 0000
+W 				   V NESO
+in the way   visited orientation
+
+for every cell consider 2 lines
+
+0,0 : 1,1 and 2,1
+
+1,3 : 3,7 and 4,7
+(3*line)+1 (3*line)+2
+(2*col)+1
+*/
+
+void erase_minotaur(MAZE* maze) {
+	POS minotaur = maze->minotaur;
+	printf("\033[%d;%dH  ", (minotaur.x*2)+2, (minotaur.y*3)+2);
+	fflush(stdout);
+}
+
+void display_minotaur(MAZE* maze) {
+	POS minotaur = maze->minotaur;
+	printf("\033[%d;%dH🐮", (minotaur.x*2)+2, (minotaur.y*3)+2);
+	fflush(stdout);
+}
+
+void display_out(MAZE* maze) {
+	POS out = maze->out;
+	printf("\033[%d;%dH🥩", (out.x*2)+2, (out.y*3)+2);
+	fflush(stdout);
+}
+
+void display_maze(MAZE* maze) {
+	int line = maze->line;
+	int col = maze->col;
+	for(int i=0; i<line; i++) {
+    for(int j=0; j<col; j++) {
+			int north = (maze->maze_array[i][j]>>3)&0x1;
+			int east 	= (maze->maze_array[i][j]>>2)&0x1;
+			int south = (maze->maze_array[i][j]>>1)&0x1;
+			int west 	= (maze->maze_array[i][j])&0x1;
+			//printf("N:%d E:%d S:%d W:%d\n",north, east, south, west);
+			if(north){
+				printf("\033[%d;%dH+--",((2*i)+1),((3*j)+1));
+			} else {
+				printf("\033[%d;%dH+  ",((2*i)+1),((3*j)+1));
+			}
+			//end of line
+			if (j==maze->col-1) {
+				printf("+");
+			}
+
+			if(west){
+				printf("\033[%d;%dH|",((2*i)+2),((3*j)+1));
+			} else {
+				printf("\033[%d;%dH ",((2*i)+2),((3*j)+1));
+			}
+			printf("  ");
+			if(east && j==maze->col-1){
+				printf("|\n");
+			}
+			if(south && i==maze->line-1){
+				printf("\033[%d;%dH+--",((2*i)+3),((3*j)+1));
+				if (j==maze->col-1) {
+					printf("+\n");
+				}
+			}
+    }
+  }
+	fflush(stdout);
+	display_minotaur(maze);
+	display_out(maze);
 }

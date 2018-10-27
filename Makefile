@@ -10,11 +10,13 @@ all: $(EXEC)
 run:
 	./$(EXEC)
 
-launchTheBeast: main.o display.o game.o
+launchTheBeast: main.o display.o game.o maze.o
 	$(CC) -o $@ $^ $(CFLAGS) $(MATHFLAGS) $(NCURSESFLAGS)
 
-game.o: maze.h
-main.o: display.h
+maze.o: maze.h
+display.o: maze.h
+game.o: display.h maze.h
+main.o: display.h maze.h
 %.o: %.c
 	$(CC) -o $@ -c $< $(CFLAGS)
 

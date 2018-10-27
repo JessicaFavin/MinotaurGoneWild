@@ -1,8 +1,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <unistd.h>
 #include "display.h"
 #include "game.h"
+#include "maze.h"
 
 int main(int argc, char* argv[]){
   int choice = 0;
@@ -18,6 +20,7 @@ int main(int argc, char* argv[]){
     file = fopen(filename, "r");
     if (file){
        maze = gener_maze_from_file(file);
+       //printf("wut? line:%d col:%d\n", maze->line, maze->col);
        fclose(file);
     }else{
        printf("This file doesn't exists.\n");
@@ -26,12 +29,9 @@ int main(int argc, char* argv[]){
   }
   //------------------------------RANDOM MAZE---------------------------------
   if(argc==1){
-    //maze = gener_random_maze();
+    maze = gener_random_maze();
   }
-  //------------------------------QUIT GAME---------------------------------
-  if(choice==3){
-    goto quit;
-  }
+
   choice = launch_menu();
   //------------------------------BERSERK MODE---------------------------------
   if(choice==1){
@@ -42,7 +42,8 @@ int main(int argc, char* argv[]){
     smart_mode(maze);
   }
   //------------------------------QUIT GAME---------------------------------
+  free_maze(maze);
   displaycursor();
-  quit:
+  printf("\033[%d;1H",((2*maze->line)+4));
   return 0;
 }

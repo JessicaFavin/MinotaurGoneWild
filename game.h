@@ -3,8 +3,7 @@
 
 #include "maze.h"
 
-MAZE* gener_maze_from_file(FILE* file);
-MAZE* gener_random_maze();
+void move_minotaur(MAZE* maze, int direction);
 void berserk_mode(MAZE* maze);
 void smart_mode(MAZE* maze);
 

@@ -12,9 +12,6 @@
 
 #define MIN(a,b) (((a)<(b))?(a):(b))
 
-#define MAX(a,b) (((a)>(b))?(a):(b))
-
-
 char key_pressed() {
     struct termios oldterm, newterm;
     int oldfd;
@@ -183,6 +180,7 @@ void berserk_mode(MAZE* maze) {
     minotaur = maze->minotaur;
     win = (minotaur.x==out.x)&&(minotaur.y==out.y);
   }
+  system("play -q -v 0.99 ./Ressources/Sounds/Moo.mp3  2> /dev/null");
   return;
 }
 
@@ -284,6 +282,7 @@ void smart_mode(MAZE* maze) {
     minotaur = maze->minotaur;
     win = (minotaur.x==out.x)&&(minotaur.y==out.y);
   }
+  system("play -q -v 0.99 ./Ressources/Sounds/Moo.mp3 2> /dev/null");
   return;
 }
 
@@ -297,8 +296,11 @@ void play_mode(MAZE* maze) {
     char c = key_pressed();
     player_actions(c, maze);
     minotaur = maze->minotaur;
-    win = (minotaur.x==out.x)&&(minotaur.y==out.y);
+    if(c == 0){
+      win = (minotaur.x==out.x)&&(minotaur.y==out.y);
+    }
   }
+  system("play -q -v 0.99 ./Ressources/Sounds/Moo.mp3 2> /dev/null");
 
   return;
 

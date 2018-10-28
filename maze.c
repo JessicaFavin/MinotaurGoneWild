@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
+#include <time.h>
 #include "maze.h"
 
 #define DEFAULT_LINE 10
@@ -31,6 +32,12 @@ MAZE* init_maze(int line, int col) {
   MAZE* maze = malloc(sizeof(MAZE));
   maze->maze_array = init_maze_array(line, col);
   return maze;
+}
+
+int check_integrity(MAZE* maze) {
+  //if maze is wrong
+  //return 0,
+  return 1;
 }
 
 MAZE* gener_maze_from_file(FILE* file) {
@@ -68,13 +75,66 @@ MAZE* gener_maze_from_file(FILE* file) {
 }
 
 MAZE* gener_random_maze() {
+  srand(time(NULL));
   MAZE* maze = init_maze(DEFAULT_LINE, DEFAULT_COL);
   //generate random maze
-  maze->in.x = 0;
-  maze->in.y = 0;
-  maze->minotaur.x = 0;
-  maze->minotaur.y = 0;
-  maze->out.x= DEFAULT_LINE;
-  maze->out.y= DEFAULT_COL;
+  maze->line = DEFAULT_LINE;
+  maze->col = DEFAULT_COL;
+  maze->out.x= (rand()%DEFAULT_LINE);
+  maze->out.y= (rand()%DEFAULT_LINE);
+  maze->in.x = (rand()%DEFAULT_LINE);
+  maze->in.y = (rand()%DEFAULT_COL);
+  while(maze->in.x==maze->out.x && maze->in.y==maze->out.y) {
+    maze->in.x = (rand()%DEFAULT_LINE);
+    maze->in.y = (rand()%DEFAULT_COL);
+  }
+  maze->minotaur.x = maze->in.x;
+  maze->minotaur.y = maze->in.y;
+
+  int destroy;
+  for(int i=0; i<DEFAULT_LINE; i++) {
+    for(int j=0; j<DEFAULT_COL; j++) {
+      unsigned short cell = 15;
+      maze->maze_array[i][j] = cell;
+      //printf("%d:%d can destroy : ",i,j);
+      if(i!=0){
+        // You can destroy NORTH
+        //printf("NORTH ");
+        destroy = rand() % 3;
+        if(destroy!=0){
+          maze->maze_array[i][j] = maze->maze_array[i][j] & 0b0111;
+          maze->maze_array[i-1][j] = maze->maze_array[i-1][j] & 01101;
+        }
+      }
+      if(j!=0){
+        // You can destroy WEST
+        //printf("WEST ");
+        destroy = rand() % 3;
+        if(destroy!=0){
+          maze->maze_array[i][j] = maze->maze_array[i][j] & 0b1110;
+          maze->maze_array[i][j-1] = maze->maze_array[i][j-1] & 0b1011;
+        }
+      }
+      if(i!=DEFAULT_LINE-1){
+        // You can destroy SOUTH
+        //printf("SOUTH ");
+        destroy = rand() % 3;
+        if(destroy!=0){
+          maze->maze_array[i][j] = maze->maze_array[i][j] & 0b1101;
+          maze->maze_array[i+1][j] = maze->maze_array[i+1][j] & 0b0111;
+        }
+      }
+      if(j!=DEFAULT_COL-1){
+        // You can destroy EAST
+        //printf("EAST ");
+        destroy = rand() % 3;
+        if(destroy!=0){
+          maze->maze_array[i][j] = maze->maze_array[i][j] & 0b1011;
+          maze->maze_array[i][j+1] = maze->maze_array[i][j+1] & 0b1110;
+        }
+      }
+      printf("\n");
+    }
+  }
   return maze;
 }

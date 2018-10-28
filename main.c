@@ -31,7 +31,14 @@ int main(int argc, char* argv[]){
   if(argc==1){
     maze = gener_random_maze();
   }
-
+  int integrity = check_integrity(maze);
+  if(!integrity) {
+    printf("The maze is all wrong ! Do it again !\n");
+    goto quit;
+  }
+  short_display_maze(maze);
+  printf("\n");
+  /*
   choice = launch_menu();
   //------------------------------BERSERK MODE---------------------------------
   if(choice==1){
@@ -45,7 +52,9 @@ int main(int argc, char* argv[]){
   if(choice==3){
     play_mode(maze);
   }
+  */
   //------------------------------QUIT GAME---------------------------------
+  quit:
   free_maze(maze);
   displaycursor();
   printf("\033[%d;1H",((2*maze->line)+4));

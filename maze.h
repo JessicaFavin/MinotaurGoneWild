@@ -28,6 +28,7 @@ struct maze{
 
 unsigned short ** init_maze_array();
 MAZE* init_maze();
+int check_integrity(MAZE* maze);
 MAZE* gener_maze_from_file(FILE* file);
 MAZE* gener_random_maze();
 void free_maze(MAZE* maze);

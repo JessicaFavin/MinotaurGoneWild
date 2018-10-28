@@ -152,6 +152,16 @@ void display_out(MAZE* maze) {
 	printf("\033[%d;%dH🥩", (out.x*2)+2, (out.y*3)+2);
 	fflush(stdout);
 }
+void short_display_maze(MAZE* maze) {
+	int line = maze->line;
+	int col = maze->col;
+	for(int i=0; i<line; i++) {
+    for(int j=0; j<col; j++) {
+			printf("%d ",maze->maze_array[i][j]);
+		}
+		printf("\n");
+	}
+}
 
 void display_maze(MAZE* maze) {
 	int line = maze->line;
@@ -164,13 +174,13 @@ void display_maze(MAZE* maze) {
 			int west 	= (maze->maze_array[i][j])&0x1;
 			//printf("N:%d E:%d S:%d W:%d\n",north, east, south, west);
 			if(north){
-				printf("\033[%d;%dH+--",((2*i)+1),((3*j)+1));
+				printf("\033[%d;%dH.__",((2*i)+1),((3*j)+1));
 			} else {
-				printf("\033[%d;%dH+  ",((2*i)+1),((3*j)+1));
+				printf("\033[%d;%dH.  ",((2*i)+1),((3*j)+1));
 			}
 			//end of line
 			if (j==maze->col-1) {
-				printf("+");
+				printf(".");
 			}
 
 			if(west){
@@ -183,9 +193,9 @@ void display_maze(MAZE* maze) {
 				printf("|\n");
 			}
 			if(south && i==maze->line-1){
-				printf("\033[%d;%dH+--",((2*i)+3),((3*j)+1));
+				printf("\033[%d;%dH.__",((2*i)+3),((3*j)+1));
 				if (j==maze->col-1) {
-					printf("+\n");
+					printf(".\n");
 				}
 			}
     }

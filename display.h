@@ -10,5 +10,6 @@ void display_minotaur(MAZE* maze);
 void erase_minotaur(MAZE* maze);
 void display_out(MAZE* maze);
 void display_maze(MAZE* maze);
+void short_display_maze(MAZE* maze);
 
 #endif

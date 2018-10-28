@@ -137,7 +137,7 @@ for every cell consider 2 lines
 
 void erase_minotaur(MAZE* maze) {
 	POS minotaur = maze->minotaur;
-	printf("\033[%d;%dH  ", (minotaur.x*2)+2, (minotaur.y*3)+2);
+	printf("\033[%d;%dH🌱", (minotaur.x*2)+2, (minotaur.y*3)+2);
 	fflush(stdout);
 }
 

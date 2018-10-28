@@ -41,6 +41,10 @@ int main(int argc, char* argv[]){
   if(choice==2){
     smart_mode(maze);
   }
+  //------------------------------SMART MODE---------------------------------
+  if(choice==3){
+    play_mode(maze);
+  }
   //------------------------------QUIT GAME---------------------------------
   free_maze(maze);
   displaycursor();

@@ -11,7 +11,7 @@ run:
 	./$(EXEC)
 
 launchTheBeast: main.o display.o game.o maze.o
-	$(CC) -o $@ $^ $(CFLAGS) $(MATHFLAGS) $(NCURSESFLAGS)
+	$(CC) -o $@ $^ $(CFLAGS) $(MATHFLAGS) $(NCURSESFLAGS) $(SDLFLAGS)
 
 maze.o: maze.h
 display.o: maze.h

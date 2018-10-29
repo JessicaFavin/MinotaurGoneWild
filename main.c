@@ -36,9 +36,11 @@ int main(int argc, char* argv[]){
     printf("The maze is all wrong ! Do it again !\n");
     goto quit;
   }
+  /*
   short_display_maze(maze);
   printf("\n");
-  /*
+  */
+
   choice = launch_menu();
   //------------------------------BERSERK MODE---------------------------------
   if(choice==1){
@@ -52,7 +54,7 @@ int main(int argc, char* argv[]){
   if(choice==3){
     play_mode(maze);
   }
-  */
+  
   //------------------------------QUIT GAME---------------------------------
   quit:
   free_maze(maze);

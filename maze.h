@@ -2,19 +2,16 @@
 #define MAZE_H
 
 #include <stdio.h>
+#define NORTH 0b1000
+#define EAST  0b0100
+#define SOUTH 0b0010
+#define WEST  0b0001
 
 typedef struct pos POS;
 struct pos{
     int x;
     int y;
 };
-
-/*
-le tableau 2D d’entiers
-le nombre de lignes et de colonnes du labyrinthe,
-la position en x et y de l’entrée/sortie du labyrinthe,
-ainsi que la position en x et y du chercheur de chemin.
-*/
 
 typedef struct maze MAZE;
 struct maze{
@@ -32,5 +29,7 @@ int check_integrity(MAZE* maze);
 MAZE* gener_maze_from_file(FILE* file);
 MAZE* gener_random_maze();
 void free_maze(MAZE* maze);
+void reinit(MAZE* maze);
+void save_maze(MAZE* maze, FILE* file);
 
 #endif

@@ -10,6 +10,7 @@ void display_minotaur(MAZE* maze);
 void erase_minotaur(MAZE* maze);
 void display_out(MAZE* maze);
 void display_maze(MAZE* maze);
-void short_display_maze(MAZE* maze);
+void display_debug_maze(MAZE* maze);
+void erase_grass(MAZE* maze);
 
 #endif

@@ -4,6 +4,7 @@
 #include <unistd.h>
 #include <time.h>
 #include "maze.h"
+#include "game.h"
 
 #define DEFAULT_LINE 10
 #define DEFAULT_COL 10
@@ -12,6 +13,9 @@ unsigned short ** init_maze_array(int line, int col) {
   unsigned short ** maze_array = calloc(line, sizeof(unsigned short*));
   for(int i=0; i<line; i++) {
     maze_array[i] = calloc(col, sizeof(unsigned short));
+    for(int j=0; j<col; j++) {
+      maze_array[i][j] = 0b1111;
+    }
   }
   return maze_array;
 }
@@ -34,10 +38,55 @@ MAZE* init_maze(int line, int col) {
   return maze;
 }
 
+void reinit(MAZE* maze) {
+  for(int i=0; i<maze->line; i++) {
+    for(int j=0; j<maze->col; j++) {
+      maze->maze_array[i][j] &= 0b1111;
+    }
+  }
+  maze->minotaur.x = maze->in.x;
+  maze->minotaur.y = maze->in.y;
+}
+
+int walls_make_sense(MAZE* maze) {
+  for(int i=0; i<DEFAULT_LINE; i++) {
+    for(int j=0; j<DEFAULT_COL; j++) {
+      if(i!=0){
+        if((maze->maze_array[i][j]&NORTH)==NORTH && (maze->maze_array[i-1][j]&SOUTH)!=SOUTH){
+          printf("N%d %d %d %d\n",i, j, (maze->maze_array[i][j]&NORTH),(maze->maze_array[i-1][j]&SOUTH));
+          return 0;
+        }
+      }
+      if(j!=0){
+        if((maze->maze_array[i][j]&WEST)==NORTH && (maze->maze_array[i][j-1]&EAST)!=EAST){
+          printf("W%d %d %d %d\n",i, j, (maze->maze_array[i][j]&WEST),(maze->maze_array[i][j-1]&EAST));
+          return 0;
+        }
+      }
+      if(i!=DEFAULT_LINE-1){
+        if((maze->maze_array[i][j]&SOUTH)==NORTH && (maze->maze_array[i+1][j]&NORTH)!=NORTH){
+          printf("S%d %d %d %d\n",i, j, (maze->maze_array[i][j]&SOUTH),(maze->maze_array[i+1][j]&NORTH));
+          return 0;
+        }
+      }
+      if(j!=DEFAULT_COL-1){
+        if((maze->maze_array[i][j]&EAST)==NORTH && (maze->maze_array[i][j+1]&WEST)!=WEST){
+          printf("E%d %d %d %d\n",i, j, (maze->maze_array[i][j]&EAST),(maze->maze_array[i][j+1]&WEST));
+          return 0;
+        }
+      }
+
+    }
+  }
+  return 1;
+}
+
 int check_integrity(MAZE* maze) {
   //if maze is wrong
-  //return 0,
-  return 1;
+  if(walls_make_sense(maze)==1 && valid_labyrinth(maze)==1){
+    return 1;
+  }
+  return 0;
 }
 
 MAZE* gener_maze_from_file(FILE* file) {
@@ -89,49 +138,58 @@ MAZE* gener_random_maze() {
   maze->minotaur.y = maze->in.y;
 
   int destroy;
+  //printf("\033[35;0H");
   for(int i=0; i<DEFAULT_LINE; i++) {
     for(int j=0; j<DEFAULT_COL; j++) {
-      unsigned short cell = 15;
-      maze->maze_array[i][j] = cell;
       //printf("%d:%d can destroy : ",i,j);
       if(i!=0){
-        // You can destroy NORTH
-        //printf("NORTH ");
         destroy = rand() % 3;
-        if(destroy!=0){
-          maze->maze_array[i][j] = maze->maze_array[i][j] & 0b0111;
-          maze->maze_array[i-1][j] = maze->maze_array[i-1][j] & 01101;
+        if(destroy==0){
+          //Destroy NORTH
+          maze->maze_array[i][j] &=  ~NORTH;
+          maze->maze_array[i-1][j] &= ~SOUTH;
+
         }
       }
       if(j!=0){
-        // You can destroy WEST
-        //printf("WEST ");
         destroy = rand() % 3;
-        if(destroy!=0){
-          maze->maze_array[i][j] = maze->maze_array[i][j] & 0b1110;
-          maze->maze_array[i][j-1] = maze->maze_array[i][j-1] & 0b1011;
+        if(destroy==0){
+          //Destroy WEST
+          maze->maze_array[i][j] &=  ~WEST;
+          maze->maze_array[i][j-1] &=  ~EAST;
         }
       }
       if(i!=DEFAULT_LINE-1){
-        // You can destroy SOUTH
-        //printf("SOUTH ");
         destroy = rand() % 3;
-        if(destroy!=0){
-          maze->maze_array[i][j] = maze->maze_array[i][j] & 0b1101;
-          maze->maze_array[i+1][j] = maze->maze_array[i+1][j] & 0b0111;
+        if(destroy==0){
+          //Destroy SOUTH
+          maze->maze_array[i][j] &= ~SOUTH;
+          maze->maze_array[i+1][j] &=  ~NORTH;
+
         }
       }
       if(j!=DEFAULT_COL-1){
-        // You can destroy EAST
-        //printf("EAST ");
         destroy = rand() % 3;
-        if(destroy!=0){
-          maze->maze_array[i][j] = maze->maze_array[i][j] & 0b1011;
-          maze->maze_array[i][j+1] = maze->maze_array[i][j+1] & 0b1110;
+        if(destroy==0){
+          //Destroy EAST
+          maze->maze_array[i][j] &= ~EAST;
+          maze->maze_array[i][j+1] &= ~WEST;
         }
       }
-      printf("\n");
+
     }
   }
   return maze;
+}
+
+void save_maze(MAZE* maze, FILE* file) {
+  int line = maze->line;
+  int col = maze->col;
+  fprintf(file, "%d %d %d %d %d %d\n", line, col, maze->in.x, maze->in.y, maze->out.x, maze->out.y);
+  for(int i=0; i<line; i++) {
+    for(int j=0; j<col; j++) {
+      fprintf(file, "%hu ",maze->maze_array[i][j]);
+    }
+    fprintf(file, "\n");
+  }
 }

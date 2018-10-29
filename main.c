@@ -6,22 +6,42 @@
 #include "game.h"
 #include "maze.h"
 
+void print_bit(unsigned short s) {
+  for(int i=15; i>=0; i--){
+    int bit = (s>>i)&1;
+    printf("%d",bit);
+    if(i%4==0){
+      printf(" ");
+    }
+  }
+  printf("\n");
+  return;
+}
+
 int main(int argc, char* argv[]){
+
+  int from_file = 0;
+  char* filename;
+  MAZE* maze;
   int choice = 0;
+  FILE * file;
   hidecursor();
   system("clear");
   printf("\033[1;1H");
-  char* filename;
-  MAZE* maze;
   //------------------------------FILE MAZE---------------------------------
   if(argc>1){
     filename = argv[1];
-    FILE * file;
     file = fopen(filename, "r");
     if (file){
+      from_file = 1;
        maze = gener_maze_from_file(file);
        //printf("wut? line:%d col:%d\n", maze->line, maze->col);
        fclose(file);
+       int integrity = check_integrity(maze);
+       if(!integrity) {
+         printf("The maze is all wrong ! Do it again !\n");
+         goto quit;
+       }
     }else{
        printf("This file doesn't exists.\n");
        exit(1);
@@ -29,17 +49,14 @@ int main(int argc, char* argv[]){
   }
   //------------------------------RANDOM MAZE---------------------------------
   if(argc==1){
-    maze = gener_random_maze();
+    do{
+      maze = gener_random_maze();
+    } while(!check_integrity(maze));
   }
-  int integrity = check_integrity(maze);
-  if(!integrity) {
-    printf("The maze is all wrong ! Do it again !\n");
-    goto quit;
-  }
-  /*
-  short_display_maze(maze);
-  printf("\n");
-  */
+
+  reinit(maze);
+
+
 
   choice = launch_menu();
   //------------------------------BERSERK MODE---------------------------------
@@ -52,13 +69,28 @@ int main(int argc, char* argv[]){
   }
   //------------------------------SMART MODE---------------------------------
   if(choice==3){
-    play_mode(maze);
+    //play_mode(maze);
+    goto quit;
   }
-  
+
   //------------------------------QUIT GAME---------------------------------
   quit:
-  free_maze(maze);
   displaycursor();
   printf("\033[%d;1H",((2*maze->line)+4));
+  if(!from_file){
+    printf("Save file ? [y|n]\n");
+    char c;
+    scanf("\n %c", &c);
+    if(c=='Y' || c=='y'){
+      char location[256];
+      printf("Where to ? ");
+      scanf("%s",location);
+      file = fopen(location, "wb");
+      save_maze(maze, file);
+      fclose(file);
+    }
+  }
+  free_maze(maze);
+
   return 0;
 }

@@ -141,6 +141,12 @@ void erase_minotaur(MAZE* maze) {
 	fflush(stdout);
 }
 
+void erase_grass(MAZE* maze) {
+	POS minotaur = maze->minotaur;
+	printf("\033[%d;%dH ", (minotaur.x*2)+2, (minotaur.y*3)+2);
+	fflush(stdout);
+}
+
 void display_minotaur(MAZE* maze) {
 	POS minotaur = maze->minotaur;
 	printf("\033[%d;%dH🐮", (minotaur.x*2)+2, (minotaur.y*3)+2);
@@ -152,16 +158,6 @@ void display_out(MAZE* maze) {
 	printf("\033[%d;%dH💃", (out.x*2)+2, (out.y*3)+2);
 	//printf("\033[%d;%dH🥩", (out.x*2)+2, (out.y*3)+2);
 	fflush(stdout);
-}
-void short_display_maze(MAZE* maze) {
-	int line = maze->line;
-	int col = maze->col;
-	for(int i=0; i<line; i++) {
-    for(int j=0; j<col; j++) {
-			printf("%d ",maze->maze_array[i][j]);
-		}
-		printf("\n");
-	}
 }
 
 void display_maze(MAZE* maze) {

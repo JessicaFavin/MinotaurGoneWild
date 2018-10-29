@@ -13,7 +13,7 @@ run:
 launchTheBeast: main.o display.o game.o maze.o
 	$(CC) -o $@ $^ $(CFLAGS) $(MATHFLAGS) $(NCURSESFLAGS) $(SDLFLAGS)
 
-maze.o: maze.h
+maze.o: maze.h game.h
 display.o: maze.h
 game.o: display.h maze.h
 main.o: display.h maze.h

@@ -159,22 +159,15 @@ void berserk_mode(MAZE* maze) {
       //this ain't the right way
       maze->maze_array[minotaur.x][minotaur.y] = cell & 0b0111111111111111;
       //move back to the last right way cell
-      if(northDoor==0 && northCell!=32 && on_the_right_way(northCell)==1) {
-        move_minotaur(maze, 'N', 1);
-      } else if (eastDoor==0 && eastCell!=32 && on_the_right_way(eastCell)==1) {
-        move_minotaur(maze, 'E', 1);
+      if (westDoor==0 && westCell!=32 && on_the_right_way(westCell)==1) {
+        move_minotaur(maze, 'W', 1);
       } else if (southDoor==0 && southCell!=32 && on_the_right_way(southCell)==1) {
         move_minotaur(maze, 'S', 1);
-      } else if (westDoor==0 && westCell!=32 && on_the_right_way(westCell)==1) {
-        move_minotaur(maze, 'W', 1);
+      }else if (eastDoor==0 && eastCell!=32 && on_the_right_way(eastCell)==1) {
+        move_minotaur(maze, 'E', 1);
+      }  else if(northDoor==0 && northCell!=32 && on_the_right_way(northCell)==1) {
+        move_minotaur(maze, 'N', 1);
       }
-      /*
-      sleep(2);
-      printf("\033[3;10H                                               ");
-      printf("\033[3;10H    The minotaur is blocked. Rage quiting !    ");
-      printf("\033[3;10H                                               ");
-      exit(12);
-      */
     }
     //minautor is on the out cell
     minotaur = maze->minotaur;

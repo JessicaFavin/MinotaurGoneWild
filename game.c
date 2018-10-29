@@ -12,7 +12,7 @@
 
 #define MIN(a,b) (((a)<(b))?(a):(b))
 
-/*
+
 char key_pressed() {
     struct termios oldterm, newterm;
     int oldfd;
@@ -32,7 +32,7 @@ char key_pressed() {
     }
     return result;
 }
-*/
+
 void move_minotaur(MAZE* maze, int direction, int wait) {
   if(wait)
     sleep(1);
@@ -105,10 +105,10 @@ int on_the_right_way(unsigned short cell) {
 int player_actions(char c, MAZE* maze){
     int b = 1;
     POS minotaur = maze->minotaur;
-    if((c=='d'||c=='D') && minotaur.y<maze->col-1){
+    if((c=='d'||c=='D') && minotaur.y>0){
         move_minotaur(maze, 'W', 0);
     }
-    if((c=='q'||c=='C') && minotaur.y>0){
+    if((c=='q'||c=='C') && minotaur.y<maze->col-1){
         move_minotaur(maze, 'E', 0);
     }
     if((c=='A' || c=='z') && minotaur.x>0){
@@ -346,7 +346,7 @@ void smart_mode(MAZE* maze) {
   system("play -q -v 0.99 ./Ressources/Sounds/Moo.mp3 &");
   return;
 }
-/*
+
 void play_mode(MAZE* maze) {
   int win = 0;
   POS out = maze->out;
@@ -354,14 +354,16 @@ void play_mode(MAZE* maze) {
   display_maze(maze);
   while(win==0){
     char c = key_pressed();
+    if(c=='l'){
+      return;
+    }
     player_actions(c, maze);
     minotaur = maze->minotaur;
     if(c == 0){
       win = (minotaur.x==out.x)&&(minotaur.y==out.y);
     }
   }
-  system("play -q -v 0.99 ./Ressources/Sounds/Moo.mp3 2> /dev/null");
+  system("play -q -v 0.99 ./Ressources/Sounds/Moo.mp3 &");
   return;
 
 }
-*/

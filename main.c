@@ -69,7 +69,7 @@ int main(int argc, char* argv[]){
   }
   //------------------------------SMART MODE---------------------------------
   if(choice==3){
-    //play_mode(maze);
+    play_mode(maze);
     goto quit;
   }
 

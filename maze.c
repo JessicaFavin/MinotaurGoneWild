@@ -41,11 +41,9 @@ int check_integrity(MAZE* maze) {
 }
 
 MAZE* gener_maze_from_file(FILE* file) {
-  FILE *fp;
   //generate maze
-  fp = fopen("maze.txt", "r");
   int line, col, inX, inY, outX, outY, value;
-  value = fscanf(fp, "%d %d %d %d %d %d\n", &line, &col, &inX, &inY, &outX, &outY);
+  value = fscanf(file, "%d %d %d %d %d %d\n", &line, &col, &inX, &inY, &outX, &outY);
   MAZE* maze = init_maze(line, col);
   maze->line = line;
   maze->col = col;
@@ -62,7 +60,7 @@ MAZE* gener_maze_from_file(FILE* file) {
   for(int i=0; i<line; i++) {
     for(int j=0; j<col; j++) {
       //check if value makes sense too
-      value = fscanf(fp, "%hd", &maze->maze_array[i][j]);
+      value = fscanf(file, "%hd", &maze->maze_array[i][j]);
       //printf("%d %d %hd\n", i, j, maze->maze_array[i][j]);
       if(value != 1){
         printf("File unreadable.\n");
@@ -70,7 +68,6 @@ MAZE* gener_maze_from_file(FILE* file) {
       }
     }
   }
-  fclose(fp);
   return maze;
 }
 

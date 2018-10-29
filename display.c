@@ -149,7 +149,8 @@ void display_minotaur(MAZE* maze) {
 
 void display_out(MAZE* maze) {
 	POS out = maze->out;
-	printf("\033[%d;%dH🥩", (out.x*2)+2, (out.y*3)+2);
+	printf("\033[%d;%dH💃", (out.x*2)+2, (out.y*3)+2);
+	//printf("\033[%d;%dH🥩", (out.x*2)+2, (out.y*3)+2);
 	fflush(stdout);
 }
 void short_display_maze(MAZE* maze) {

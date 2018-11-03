@@ -76,10 +76,6 @@ int launch_menu() {
   mvprintw(9, (col/3)-(47/2), "| |  _ / _ \\| '_ \\ / _ \\  \\ \\ /\\ / /| | |/ _` |");
   mvprintw(10, (col/3)-(47/2), "| |_| | (_) | | | |  __/   \\ V  V / | | | (_| |");
   mvprintw(11, (col/3)-(47/2), " \\____|\\___/|_| |_|\\___|    \\_/\\_/  |_|_|\\__,_|");
-  /*
-  getmaxyx(stdscr,row,col);		// get the number of rows and columns
-  mvprintw(row/2,(col-strlen(mesg))/2,"%s",mesg);
-  */
 	refresh();
 	print_menu(menu_win, highlight);
 	while(1)
@@ -112,28 +108,6 @@ int launch_menu() {
 	endwin();
 	return choice;
 }
-/*
-+--+--+--+--+--+
-|  |  |  |  |  |
-+--+--+--+--+--+
-|  |  |  |  |  |
-+--+--+--+--+--+
-|  |  |  |  |  |
-+--+--+--+--+--+
-(line+1), (line+2)
-(col+1)
-0000 0000 0000 0000
-W 				   V NESO
-in the way   visited orientation
-
-for every cell consider 2 lines
-
-0,0 : 1,1 and 2,1
-
-1,3 : 3,7 and 4,7
-(3*line)+1 (3*line)+2
-(2*col)+1
-*/
 
 void erase_minotaur(MAZE* maze) {
 	POS minotaur = maze->minotaur;
@@ -169,30 +143,29 @@ void display_maze(MAZE* maze) {
 			int east 	= (maze->maze_array[i][j]>>2)&0x1;
 			int south = (maze->maze_array[i][j]>>1)&0x1;
 			int west 	= (maze->maze_array[i][j])&0x1;
-			//printf("N:%d E:%d S:%d W:%d\n",north, east, south, west);
 			if(north){
-				printf("\033[%d;%dH.__",((2*i)+1),((3*j)+1));
+				printf("\033[%d;%dH╬══",((2*i)+1),((3*j)+1));
 			} else {
-				printf("\033[%d;%dH.  ",((2*i)+1),((3*j)+1));
+				printf("\033[%d;%dH╬  ",((2*i)+1),((3*j)+1));
 			}
 			//end of line
 			if (j==maze->col-1) {
-				printf(".");
+				printf("╬");
 			}
 
 			if(west){
-				printf("\033[%d;%dH|",((2*i)+2),((3*j)+1));
+				printf("\033[%d;%dH║",((2*i)+2),((3*j)+1));
 			} else {
 				printf("\033[%d;%dH ",((2*i)+2),((3*j)+1));
 			}
 			printf("  ");
 			if(east && j==maze->col-1){
-				printf("|\n");
+				printf("║\n");
 			}
 			if(south && i==maze->line-1){
-				printf("\033[%d;%dH.__",((2*i)+3),((3*j)+1));
+				printf("\033[%d;%dH╬══",((2*i)+3),((3*j)+1));
 				if (j==maze->col-1) {
-					printf(".\n");
+					printf("╬\n");
 				}
 			}
     }

@@ -242,9 +242,7 @@ int depth_search(MAZE* maze, int display) {
 void berserk_mode(MAZE* maze) {
   display_maze(maze);
   int win = depth_search(maze, 1);
-  if(win){
-    system("play -q -v 0.99 ./Ressources/Sounds/Moo.mp3 &");
-  }
+  system("play -q -v 0.99 ./Ressources/Sounds/Moo.mp3 2> /dev/null &");
 }
 
 int valid_labyrinth(MAZE* maze) {
@@ -343,7 +341,7 @@ void smart_mode(MAZE* maze) {
     minotaur = maze->minotaur;
     win = (minotaur.x==out.x)&&(minotaur.y==out.y);
   }
-  system("play -q -v 0.99 ./Ressources/Sounds/Moo.mp3 &");
+  system("play -q -v 0.99 ./Ressources/Sounds/Moo.mp3 2> /dev/null &");
   return;
 }
 
@@ -363,7 +361,7 @@ void play_mode(MAZE* maze) {
       win = (minotaur.x==out.x)&&(minotaur.y==out.y);
     }
   }
-  system("play -q -v 0.99 ./Ressources/Sounds/Moo.mp3 &");
+  system("play -q -v 0.99 ./Ressources/Sounds/Moo.mp3 2> /dev/null &");
   return;
 
 }

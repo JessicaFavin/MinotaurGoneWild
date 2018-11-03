@@ -49,29 +49,41 @@ void reinit(MAZE* maze) {
 }
 
 int walls_make_sense(MAZE* maze) {
-  for(int i=0; i<DEFAULT_LINE; i++) {
-    for(int j=0; j<DEFAULT_COL; j++) {
+  for(int i=0; i<maze->line; i++) {
+    for(int j=0; j<maze->col; j++) {
       if(i!=0){
-        if((maze->maze_array[i][j]&NORTH)==NORTH && (maze->maze_array[i-1][j]&SOUTH)!=SOUTH){
-          printf("N%d %d %d %d\n",i, j, (maze->maze_array[i][j]&NORTH),(maze->maze_array[i-1][j]&SOUTH));
+        if(((maze->maze_array[i][j]&NORTH)==NORTH) && ((maze->maze_array[i-1][j]&SOUTH)!=SOUTH)){
+          return 0;
+        }
+      } else {
+        if(((maze->maze_array[i][j]&NORTH)!=NORTH) ) {
           return 0;
         }
       }
       if(j!=0){
-        if((maze->maze_array[i][j]&WEST)==NORTH && (maze->maze_array[i][j-1]&EAST)!=EAST){
-          printf("W%d %d %d %d\n",i, j, (maze->maze_array[i][j]&WEST),(maze->maze_array[i][j-1]&EAST));
+        if(((maze->maze_array[i][j]&WEST)==WEST) && ((maze->maze_array[i][j-1]&EAST)!=EAST)){
+          return 0;
+        }
+      } else {
+        if(((maze->maze_array[i][j]&WEST)!=WEST) ) {
           return 0;
         }
       }
-      if(i!=DEFAULT_LINE-1){
-        if((maze->maze_array[i][j]&SOUTH)==NORTH && (maze->maze_array[i+1][j]&NORTH)!=NORTH){
-          printf("S%d %d %d %d\n",i, j, (maze->maze_array[i][j]&SOUTH),(maze->maze_array[i+1][j]&NORTH));
+      if(i!=maze->line-1){
+        if(((maze->maze_array[i][j]&SOUTH)==SOUTH) && ((maze->maze_array[i+1][j]&NORTH)!=NORTH)){
+          return 0;
+        }
+      } else {
+        if(((maze->maze_array[i][j]&SOUTH)!=SOUTH) ) {
           return 0;
         }
       }
-      if(j!=DEFAULT_COL-1){
-        if((maze->maze_array[i][j]&EAST)==NORTH && (maze->maze_array[i][j+1]&WEST)!=WEST){
-          printf("E%d %d %d %d\n",i, j, (maze->maze_array[i][j]&EAST),(maze->maze_array[i][j+1]&WEST));
+      if(j!=maze->col-1){
+        if(((maze->maze_array[i][j]&EAST)==EAST) && ((maze->maze_array[i][j+1]&WEST)!=WEST)){
+          return 0;
+        }
+      } else {
+        if(((maze->maze_array[i][j]&EAST)!=EAST) ) {
           return 0;
         }
       }
@@ -80,10 +92,12 @@ int walls_make_sense(MAZE* maze) {
   }
   return 1;
 }
+int all_in(MAZE* maze){
+  return maze->in.x<maze->line && maze->in.y<maze->col && maze->out.x<maze->line && maze->out.y<maze->col;
+}
 
 int check_integrity(MAZE* maze) {
-  //if maze is wrong
-  if(walls_make_sense(maze)==1 && valid_labyrinth(maze)==1){
+  if(walls_make_sense(maze) && valid_labyrinth(maze) && all_in(maze)){
     return 1;
   }
   return 0;
@@ -93,6 +107,10 @@ MAZE* gener_maze_from_file(FILE* file) {
   //generate maze
   int line, col, inX, inY, outX, outY, value;
   value = fscanf(file, "%d %d %d %d %d %d\n", &line, &col, &inX, &inY, &outX, &outY);
+  if(value != 6){
+    printf("File unreadable.\n");
+    exit(2);
+  }
   MAZE* maze = init_maze(line, col);
   maze->line = line;
   maze->col = col;
@@ -102,15 +120,10 @@ MAZE* gener_maze_from_file(FILE* file) {
   maze->minotaur.y = inY;
   maze->out.x= outX;
   maze->out.y= outY;
-  if(value != 6){
-    printf("File unreadable.\n");
-    exit(2);
-  }
   for(int i=0; i<line; i++) {
     for(int j=0; j<col; j++) {
       //check if value makes sense too
       value = fscanf(file, "%hd", &maze->maze_array[i][j]);
-      //printf("%d %d %hd\n", i, j, maze->maze_array[i][j]);
       if(value != 1){
         printf("File unreadable.\n");
         exit(2);
@@ -120,28 +133,26 @@ MAZE* gener_maze_from_file(FILE* file) {
   return maze;
 }
 
-MAZE* gener_random_maze() {
+MAZE* gener_random_maze(int line, int col) {
   srand(time(NULL));
-  MAZE* maze = init_maze(DEFAULT_LINE, DEFAULT_COL);
+  MAZE* maze = init_maze(line, col);
   //generate random maze
-  maze->line = DEFAULT_LINE;
-  maze->col = DEFAULT_COL;
-  maze->out.x= (rand()%DEFAULT_LINE);
-  maze->out.y= (rand()%DEFAULT_LINE);
-  maze->in.x = (rand()%DEFAULT_LINE);
-  maze->in.y = (rand()%DEFAULT_COL);
+  maze->line = line;
+  maze->col = col;
+  maze->out.x= (rand()%line);
+  maze->out.y= (rand()%col);
+  maze->in.x = (rand()%line);
+  maze->in.y = (rand()%col);
   while(maze->in.x==maze->out.x && maze->in.y==maze->out.y) {
-    maze->in.x = (rand()%DEFAULT_LINE);
-    maze->in.y = (rand()%DEFAULT_COL);
+    maze->in.x = (rand()%line);
+    maze->in.y = (rand()%col);
   }
   maze->minotaur.x = maze->in.x;
   maze->minotaur.y = maze->in.y;
 
   int destroy;
-  //printf("\033[35;0H");
-  for(int i=0; i<DEFAULT_LINE; i++) {
-    for(int j=0; j<DEFAULT_COL; j++) {
-      //printf("%d:%d can destroy : ",i,j);
+  for(int i=0; i<line; i++) {
+    for(int j=0; j<col; j++) {
       if(i!=0){
         destroy = rand() % 3;
         if(destroy==0){
@@ -159,7 +170,7 @@ MAZE* gener_random_maze() {
           maze->maze_array[i][j-1] &=  ~EAST;
         }
       }
-      if(i!=DEFAULT_LINE-1){
+      if(i!=maze->line-1){
         destroy = rand() % 3;
         if(destroy==0){
           //Destroy SOUTH
@@ -168,7 +179,7 @@ MAZE* gener_random_maze() {
 
         }
       }
-      if(j!=DEFAULT_COL-1){
+      if(j!=maze->col-1){
         destroy = rand() % 3;
         if(destroy==0){
           //Destroy EAST

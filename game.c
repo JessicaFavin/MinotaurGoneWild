@@ -136,11 +136,10 @@ int depth_search(MAZE* maze, int display) {
     //found the way out
     return 1;
   }
-  int northDoor, eastDoor, southDoor, westDoor, visited, rightWay;
+  int northDoor, eastDoor, southDoor, westDoor, rightWay;
   unsigned short cell, northCell, eastCell, southCell, westCell;
   cell = maze->maze_array[minotaur.x][minotaur.y];
   rightWay  = on_the_right_way(cell);
-  visited   = visitedCell(cell);
   northDoor = (cell>>3)&0b1;
   eastDoor 	= (cell>>2)&0b1;
   southDoor = (cell>>1)&0b1;
@@ -173,7 +172,7 @@ int depth_search(MAZE* maze, int display) {
       erase_minotaur(maze);
     move_minotaur_nd(maze,'N');
     foundOut = depth_search(maze, display);
-    if(foundOut==0) {
+    if(!foundOut) {
       if(display)
         erase_grass(maze);
       move_minotaur_nd(maze,'S');
@@ -190,7 +189,7 @@ int depth_search(MAZE* maze, int display) {
       erase_minotaur(maze);
     move_minotaur_nd(maze,'E');
     foundOut = depth_search(maze, display);
-    if(foundOut==0) {
+    if(!foundOut) {
       if(display)
         erase_grass(maze);
       move_minotaur_nd(maze,'W');
@@ -207,7 +206,7 @@ int depth_search(MAZE* maze, int display) {
       erase_minotaur(maze);
     move_minotaur_nd(maze,'S');
     foundOut = depth_search(maze, display);
-    if(foundOut==0) {
+    if(!foundOut) {
       if(display)
         erase_grass(maze);
       move_minotaur_nd(maze,'N');
@@ -224,7 +223,7 @@ int depth_search(MAZE* maze, int display) {
       erase_minotaur(maze);
     move_minotaur_nd(maze,'W');
     foundOut = depth_search(maze, display);
-    if(foundOut==0) {
+    if(!foundOut) {
       if(display)
         erase_grass(maze);
       move_minotaur_nd(maze,'E');
@@ -241,7 +240,7 @@ int depth_search(MAZE* maze, int display) {
 
 void berserk_mode(MAZE* maze) {
   display_maze(maze);
-  int win = depth_search(maze, 1);
+  depth_search(maze, 1);
   system("play -q -v 0.99 ./Ressources/Sounds/Moo.mp3 2> /dev/null &");
 }
 
@@ -258,7 +257,7 @@ void smart_mode(MAZE* maze) {
   display_maze(maze);
   POS minotaur = maze->minotaur;
   POS out = maze->out;
-  while(win==0){
+  while(!win){
     cell = maze->maze_array[minotaur.x][minotaur.y];
     if (minotaur.x>0) {
       northCell = maze->maze_array[minotaur.x-1][minotaur.y];
@@ -280,7 +279,7 @@ void smart_mode(MAZE* maze) {
     southDoor = (cell>>1)&0b1;
     westDoor 	= (cell)&0b1;
 
-    if(visited==0) {
+    if(!visited) {
       //Visited cell
       maze->maze_array[minotaur.x][minotaur.y] = cell | 0b10000;
       cell = maze->maze_array[minotaur.x][minotaur.y];
@@ -297,16 +296,16 @@ void smart_mode(MAZE* maze) {
     double southDistance = 300000;
     double westDistance = 300000;
 
-    if(northDoor==0 && visitedCell(northCell)==0) {
+    if(!northDoor && !visitedCell(northCell)) {
        northDistance = sqrt(pow(minotaur.x-1-out.x,2)+pow(minotaur.y-out.y,2));
     }
-    if (eastDoor==0 && visitedCell(eastCell)==0) {
+    if (!eastDoor && !visitedCell(eastCell)) {
        eastDistance =  sqrt(pow(minotaur.x-out.x,2)+pow(minotaur.y+1-out.y,2));
     }
-    if (southDoor==0 && visitedCell(southCell)==0) {
+    if (!southDoor && !visitedCell(southCell)) {
        southDistance = sqrt(pow(minotaur.x+1-out.x,2)+pow(minotaur.y-out.y,2));
     }
-    if (westDoor==0 && visitedCell(westCell)==0) {
+    if (!westDoor && !visitedCell(westCell)) {
        westDistance =  sqrt(pow(minotaur.x-out.x,2)+pow(minotaur.y-1-out.y,2));
     }
 
@@ -326,13 +325,13 @@ void smart_mode(MAZE* maze) {
       //this ain't the right way
       maze->maze_array[minotaur.x][minotaur.y] = cell & 0b0111111111111111;
       //move back to the last right way cell
-      if(northDoor==0 && on_the_right_way(northCell)==1) {
+      if(!northDoor && on_the_right_way(northCell)) {
         move_minotaur(maze, 'N', 1);
-      } else if (eastDoor==0 && on_the_right_way(eastCell)==1) {
+      } else if (!eastDoor && on_the_right_way(eastCell)) {
         move_minotaur(maze, 'E', 1);
-      } else if (southDoor==0 && on_the_right_way(southCell)==1) {
+      } else if (!southDoor && on_the_right_way(southCell)) {
         move_minotaur(maze, 'S', 1);
-      } else if (westDoor==0 && on_the_right_way(westCell)==1) {
+      } else if (!westDoor && on_the_right_way(westCell)) {
         move_minotaur(maze, 'W', 1);
       }
     }
@@ -350,7 +349,7 @@ void play_mode(MAZE* maze) {
   POS out = maze->out;
   POS minotaur;
   display_maze(maze);
-  while(win==0){
+  while(!win){
     char c = key_pressed();
     if(c=='l'){
       return;

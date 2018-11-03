@@ -14,6 +14,7 @@ To compile this porgram properly you'll need the following libraries :
 ### Launch
 To launch the game first compile the source file with the command :
 ```make```
+
 Then execute
 ```./launchTheBeast [maze_file]```
 

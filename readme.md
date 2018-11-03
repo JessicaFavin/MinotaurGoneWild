@@ -20,5 +20,4 @@ There are 3 available mode :
 * Berserk mode - uses depth search to guide the minotaur to its food
 * Smart mode - the minotaur can sense its food thanks to its powerful sense of smell
 * Be the minotaur - you can play the minotaur
-
-                    use the arrows or ZQSD to move and L to leave the game
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;use the arrows or ZQSD to move and L to leave the game

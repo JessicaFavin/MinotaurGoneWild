@@ -12,16 +12,13 @@ To compile this porgram properly you'll need the following libraries :
 * SOX (sox et libsox-fmt-mp3)
 
 ### Launch
-To launch the game first compile the source file with the command :
-```make```
-
-Then execute
-```./launchTheBeast [maze_file]```
+To launch the game first compile the source file with the command ```make``` then execute ```./launchTheBeast [maze_file]```
 
 If no file is given you'll be prompted for the number of lines and columns
 and a random maze will be generated.
 There are 3 available mode :
-- Berserk mode - uses depth search to guide the minotaur to its food
-- Smart mode - the minotaur can sense its food thanks to its powerful sense of smell
-- Be the minotaur - you can play the move_minotaur
+* Berserk mode - uses depth search to guide the minotaur to its food
+* Smart mode - the minotaur can sense its food thanks to its powerful sense of smell
+* Be the minotaur - you can play the minotaur
+
                     use the arrows or ZQSD to move and L to leave the game

@@ -1,17 +1,17 @@
-#Minotaur gone wild
+# Minotaur gone wild
 
 <!-- *********************************************************************** -->
 
-##Installation and execution
+## Installation and execution
 
-###Librairies
+### Librairies
 To compile this porgram properly you'll need the following libraries :
 * ttf-ancient-fonts
 * SDL2 (libsdl2-dev)
 * ncurses (libncurses5-dev)
 * SOX (sox et libsox-fmt-mp3)
 
-###Launch
+### Launch
 To launch the game first compile the source file with the command :
 ```make```
 Then execute

@@ -35,7 +35,7 @@ char key_pressed() {
 
 void move_minotaur(MAZE* maze, int direction, int wait) {
   if(wait)
-    sleep(1);
+    usleep(120000);
 
   erase_minotaur(maze);
   POS minotaur = maze->minotaur;
@@ -129,7 +129,7 @@ int depth_search(MAZE* maze, int display) {
   POS minotaur = maze->minotaur;
   if(display) {
     display_minotaur(maze);
-    sleep(1);
+    usleep(120000);
   }
 
   if(minotaur.x==out.x && minotaur.y==out.y){
@@ -178,7 +178,7 @@ int depth_search(MAZE* maze, int display) {
       move_minotaur_nd(maze,'S');
       if(display){
         display_minotaur(maze);
-        sleep(1);
+        usleep(120000);
       }
     } else {
       return 1;
@@ -195,7 +195,7 @@ int depth_search(MAZE* maze, int display) {
       move_minotaur_nd(maze,'W');
       if(display){
         display_minotaur(maze);
-        sleep(1);
+        usleep(120000);
       }
     } else {
       return 1;
@@ -212,7 +212,7 @@ int depth_search(MAZE* maze, int display) {
       move_minotaur_nd(maze,'N');
       if(display){
         display_minotaur(maze);
-        sleep(1);
+        usleep(120000);
       }
     } else {
       return 1;
@@ -229,7 +229,7 @@ int depth_search(MAZE* maze, int display) {
       move_minotaur_nd(maze,'E');
       if(display){
         display_minotaur(maze);
-        sleep(1);
+        usleep(120000);
       }
     } else {
       return 1;

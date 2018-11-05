@@ -36,10 +36,14 @@ int main(int argc, char* argv[]){
   //------------------------------RANDOM MAZE---------------------------------
   if(argc==1){
     int lines = 10, columns = 10;
-    printf("How many lines ? ");
-    scanf("%d",&lines);
-    printf("How many columns ? ");
-    scanf("%d",&columns);
+    do{
+      printf("How many lines ? ");
+      scanf("%d",&lines);
+    } while (lines<=0);
+    do{
+      printf("How many columns ? ");
+      scanf("%d",&columns);
+    } while (columns<=0);
     system("clear");
 
     do{
@@ -73,6 +77,7 @@ int main(int argc, char* argv[]){
       char c;
       scanf("\n %c", &c);
       if(c=='Y' || c=='y'){
+        reinit(maze);
         char location[256];
         printf("Where to ? ");
         scanf("%s",location);
